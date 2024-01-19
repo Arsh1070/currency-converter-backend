@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  currency-converter-app:
+    build: .
+    image: currency-converter-app
+    env_file: ./.env
+    ports:
+      - '8001:8001'
+    volumes:
+      - .:/usr/src/currency-converter-app
+    networks:
+      - node-network
+
+networks:
+  node-network:
+    driver: bridge

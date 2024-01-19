@@ -1,0 +1,31 @@
+services:
+  nodejs-prod:
+    build: .
+    image: nodejs-prod
+    container_name: nodejs-prod
+    command: yarn start
+    env_file: ./.env
+    ports:
+      - '8443:8443'
+    volumes:
+      - .:/usr/src/nodejs-prod
+    networks:
+      - node-network-prod
+
+  nginx-prod:
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    image: nginx-prod
+    container_name: nginx-prod
+    ports:
+      - '443:443'
+    depends_on:
+      - nodejs-prod
+    restart: always
+    networks:
+      - node-network-prod
+
+networks:
+  node-network-prod:
+    driver: bridge

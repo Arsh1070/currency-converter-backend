@@ -1,0 +1,31 @@
+services:
+  nodejs-dev:
+    build: .
+    image: nodejs-dev
+    container_name: nodejs-dev
+    command: yarn dev -L
+    env_file: ./.env
+    ports:
+      - '8001:8001'
+    volumes:
+      - .:/usr/src/nodejs-dev
+    networks:
+      - node-network-dev
+
+  nginx-dev:
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    image: nginx-dev
+    container_name: nginx-dev
+    ports:
+      - '80:80'
+    depends_on:
+      - nodejs-dev
+    restart: always
+    networks:
+      - node-network-dev
+
+networks:
+  node-network-dev:
+    driver: bridge
